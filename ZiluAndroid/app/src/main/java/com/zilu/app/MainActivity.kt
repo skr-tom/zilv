@@ -157,7 +157,7 @@ private fun saveTasks(c: Context, tasks: List<Task>) {
 }
 private fun addTask(c: Context, t: Task) = saveTasks(c, loadTasks(c) + t)
 private fun updateTask(c: Context, changed: Task) = saveTasks(c, loadTasks(c).map { if (it.id == changed.id) changed else it })
-private fun ensureToday(c: Context) {
+fun ensureToday(c: Context) {
     val today = todayKey()
     val old = loadTasks(c)
     if (old.any { it.day != today }) {
@@ -176,7 +176,7 @@ private fun ensureToday(c: Context) {
         saveTasks(c, old.map { it.copy(elapsedMs = 0, runningSince = 0, day = today) })
     }
 }
-private fun scheduleMidnight(c: Context) {
+fun scheduleMidnight(c: Context) {
     val cal = Calendar.getInstance().apply { add(Calendar.DAY_OF_YEAR, 1); set(Calendar.HOUR_OF_DAY, 0); set(Calendar.MINUTE, 0); set(Calendar.SECOND, 0); set(Calendar.MILLISECOND, 0) }
     val intent = PendingIntent.getBroadcast(c, 101, Intent(c, MidnightResetReceiver::class.java), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
     val am = c.getSystemService(Context.ALARM_SERVICE) as AlarmManager
